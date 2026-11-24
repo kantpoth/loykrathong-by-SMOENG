@@ -81,6 +81,7 @@ header p{font-size:1.05rem}
   <div class="card"><h2 id="ft">ดวงคืนวันเพ็ญ</h2><p id="fx"></p><button class="btn" id="close" type="button">ปิด</button></div>
 </div>
 
+<div id="ver" style="position:absolute;left:8px;bottom:4px;font-size:10px;opacity:.5;pointer-events:none"></div>
 <script>
 const $=id=>document.getElementById(id),cv=$('c'),ctx=cv.getContext('2d'),pv=$('pv'),pctx=pv.getContext('2d');
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -96,7 +97,7 @@ const FORT=['กระทงของคุณลอยไปไกล ควา
 const NM=['มะลิ','ฟ้าใส','น้องบัว','ปอ','ต้นกล้า','แพรวา','ภูมิ','ใจดี'];
 const WS=['ขอให้ครอบครัวสุขภาพแข็งแรง','ขอให้สอบผ่านทุกวิชา','ขอบคุณแม่น้ำที่หล่อเลี้ยงเรา','ขอให้ได้เจอคนที่รัก','ขอให้งานราบรื่น เงินทองไหลมา','ขอให้ทุกเรื่องเป็นไปด้วยดี','ขอให้โลกสงบสุข','ขอให้ความทุกข์ลอยไปกับสายน้ำ'];
 const SIDE=matchMedia('(min-width:800px),(max-height:520px) and (orientation:landscape)');let U=1,W,H,dpr,hz,pt,T=0,stars=[],ks=[],rip=[],spk=[],txt=[],idx=new Date().getDay(),sel=null;
-function resize(){dpr=Math.min(devicePixelRatio||1,2);W=Math.round(innerWidth);H=Math.round(innerHeight);cv.style.width=W+'px';cv.style.height=H+'px';cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+function resize(){dpr=1;W=Math.round(innerWidth);H=Math.round(innerHeight);cv.style.width=W+'px';cv.style.height=H+'px';cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);$('ver').textContent='v5 '+W+'x'+H+' dpr'+devicePixelRatio;
  pv.width=96*dpr;pv.height=64*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
  stars=Array.from({length:70},()=>({x:Math.random()*W,y:Math.random()*H*.35,r:Math.random()*1.4+.3,p:Math.random()*6}));}
 function ty(r){return hz+(pt-hz)*(.25+.5*r)}
