@@ -8,16 +8,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&family=Noto+Sans+Thai:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{--night:#070b24;--moon:#fff1c9;--gold:#ffb52e;--ink:#f5f0ff;--glass:rgba(10,14,48,.82);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root{--night:#070b24;--moon:#fff1c9;--gold:#ffb52e;--ink:#f5f0ff;--glass:rgba(10,14,48,.93);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0;background:var(--night);color:var(--ink);font-family:'Noto Sans Thai',system-ui,sans-serif;overflow:hidden}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{position:fixed;inset:0;width:100%;overscroll-behavior:none}
-canvas#c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:manipulation}
+canvas#c{position:absolute;left:0;top:0;display:block;touch-action:manipulation}
 h1{font-family:'Mali',serif;font-weight:700;font-size:clamp(1.5rem,6vw,2.4rem);margin:0;color:var(--moon);text-shadow:0 0 24px rgba(255,200,90,.45)}
 header{position:absolute;left:0;right:0;top:env(safe-area-inset-top,0px);padding:14px 20px;pointer-events:none}
 header p{margin:2px 0 0;font-size:.9rem;opacity:.85}
-.panel{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:min(560px,100%);padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:var(--glass);border-radius:22px 22px 0 0;backdrop-filter:blur(10px);border:1px solid rgba(255,241,201,.18);border-bottom:0}
+.panel{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:min(560px,100%);padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px));background:var(--glass);border-radius:22px 22px 0 0;border:1px solid rgba(255,241,201,.18);border-bottom:0}
 .pick{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .arrow{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,241,201,.35);background:rgba(255,255,255,.08);color:var(--moon);font-size:1.3rem;cursor:pointer;flex:none}
 .pv{flex:1;display:flex;align-items:center;gap:10px;justify-content:center;min-width:0}
@@ -96,8 +96,8 @@ const FORT=['กระทงของคุณลอยไปไกล ควา
 const NM=['มะลิ','ฟ้าใส','น้องบัว','ปอ','ต้นกล้า','แพรวา','ภูมิ','ใจดี'];
 const WS=['ขอให้ครอบครัวสุขภาพแข็งแรง','ขอให้สอบผ่านทุกวิชา','ขอบคุณแม่น้ำที่หล่อเลี้ยงเรา','ขอให้ได้เจอคนที่รัก','ขอให้งานราบรื่น เงินทองไหลมา','ขอให้ทุกเรื่องเป็นไปด้วยดี','ขอให้โลกสงบสุข','ขอให้ความทุกข์ลอยไปกับสายน้ำ'];
 const SIDE=matchMedia('(min-width:800px),(max-height:520px) and (orientation:landscape)');let U=1,W,H,dpr,hz,pt,T=0,stars=[],ks=[],rip=[],spk=[],txt=[],idx=new Date().getDay(),sel=null;
-function resize(){dpr=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;
- pv.width=96*dpr;pv.height=64*dpr;
+function resize(){dpr=Math.min(devicePixelRatio||1,2);W=Math.round(innerWidth);H=Math.round(innerHeight);cv.style.width=W+'px';cv.style.height=H+'px';cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+ pv.width=96*dpr;pv.height=64*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
  stars=Array.from({length:70},()=>({x:Math.random()*W,y:Math.random()*H*.35,r:Math.random()*1.4+.3,p:Math.random()*6}));}
 function ty(r){return hz+(pt-hz)*(.25+.5*r)}
 function add(st,name,wish,mine){const r=Math.random();
@@ -163,7 +163,7 @@ cv.addEventListener('pointerup',e=>{const k=hit(e);if(!k){closePop();return}
 cv.addEventListener('pointermove',e=>{cv.style.cursor=hit(e)?'pointer':'default'});
 function closePop(){sel=null;$('pop').hidden=true}
 $('px').onclick=closePop;
-resize();addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,250));
+resize();addEventListener('resize',resize);addEventListener('orientationchange',()=>setTimeout(resize,250));addEventListener('load',()=>setTimeout(resize,150));if(window.visualViewport)visualViewport.addEventListener('resize',resize);
 setIdx(idx);hz=H*.36;pt=H*.7;
 for(let i=0;i<8;i++)add(i%7,NM[i],WS[i],false);
 requestAnimationFrame(draw);
