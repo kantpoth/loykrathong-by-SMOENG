@@ -33,6 +33,7 @@ textarea{resize:none;height:52px;margin-bottom:8px}
 .row{display:flex;gap:8px}
 .btn{flex:1;border:0;border-radius:14px;padding:11px;font:inherit;font-weight:600;cursor:pointer;color:#2a1600;background:linear-gradient(135deg,#ffd36a,var(--gold))}
 .btn.alt{background:rgba(255,255,255,.12);color:var(--ink)}
+.btn:disabled{opacity:.55;cursor:not-allowed}
 :focus-visible{outline:3px solid var(--moon);outline-offset:2px}
 #fortune{position:absolute;inset:0;display:none;place-items:center;background:rgba(7,11,36,.6);padding:20px;z-index:5}
 #fortune.on{display:grid}
@@ -97,7 +98,7 @@ const FORT=['กระทงของคุณลอยไปไกล ควา
 const NM=['มะลิ','ฟ้าใส','น้องบัว','ปอ','ต้นกล้า','แพรวา','ภูมิ','ใจดี'];
 const WS=['ขอให้ครอบครัวสุขภาพแข็งแรง','ขอให้สอบผ่านทุกวิชา','ขอบคุณแม่น้ำที่หล่อเลี้ยงเรา','ขอให้ได้เจอคนที่รัก','ขอให้งานราบรื่น เงินทองไหลมา','ขอให้ทุกเรื่องเป็นไปด้วยดี','ขอให้โลกสงบสุข','ขอให้ความทุกข์ลอยไปกับสายน้ำ'];
 const SIDE=matchMedia('(min-width:800px),(max-height:520px) and (orientation:landscape)');let U=1,W,H,dpr,hz,pt,T=0,stars=[],ks=[],rip=[],spk=[],txt=[],idx=new Date().getDay(),sel=null;
-function resize(){dpr=1;W=Math.round(innerWidth);H=Math.round(innerHeight);cv.style.width=W+'px';cv.style.height=H+'px';cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);$('ver').textContent='v5 '+W+'x'+H+' dpr'+devicePixelRatio;
+function resize(){dpr=1;W=Math.round(innerWidth);H=Math.round(innerHeight);cv.style.width=W+'px';cv.style.height=H+'px';cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);$('ver').textContent='v6 '+W+'x'+H+' dpr'+devicePixelRatio;
  pv.width=96*dpr;pv.height=64*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
  stars=Array.from({length:70},()=>({x:Math.random()*W,y:Math.random()*H*.35,r:Math.random()*1.4+.3,p:Math.random()*6}));}
 function ty(r){return hz+(pt-hz)*(.25+.5*r)}
@@ -170,7 +171,16 @@ for(let i=0;i<8;i++)add(i%7,NM[i],WS[i],false);
 requestAnimationFrame(draw);
 $('prev').onclick=()=>setIdx(idx-1);$('next').onclick=()=>setIdx(idx+1);
 $('bd').onchange=e=>{if(e.target.value)setIdx(new Date(e.target.value+'T00:00').getDay())};
-$('float').onclick=()=>{add(idx,$('name').value.trim(),$('wish').value.trim(),true);$('wish').value=''};
+const LS='loykrathong.last',COOL=600000;
+function ld(){try{return JSON.parse(localStorage.getItem(LS))}catch(e){return null}}
+let last=ld(),lastT=last?last.t:0;
+function leftMs(){return Math.max(0,Math.min(COOL,lastT+COOL-Date.now()))}
+function tick(){const l=leftMs(),b=$('float');b.disabled=l>0;b.textContent=l>0?'รออีก '+Math.floor(l/60000)+':'+String(Math.floor(l/1000)%60).padStart(2,'0')+' นาที':'ลอยกระทง'}
+if(last&&Date.now()-last.t<864e5){const k=add(last.st,last.name,last.wish,true);k.landed=true;k.land=-9}
+$('float').onclick=()=>{if(leftMs()>0){tick();return}
+ const n=$('name').value.trim(),w=$('wish').value.trim();add(idx,n,w,true);$('wish').value='';
+ lastT=Date.now();try{localStorage.setItem(LS,JSON.stringify({t:lastT,st:idx,name:n,wish:w}))}catch(e){}tick()};
+tick();setInterval(tick,1000);
 $('fort').onclick=()=>{$('fx').textContent=FORT[Math.floor(Math.random()*FORT.length)];$('fortune').classList.add('on');$('close').focus()};
 $('close').onclick=()=>$('fortune').classList.remove('on');
 </script>
