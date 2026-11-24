@@ -97,7 +97,7 @@ const NM=['มะลิ','ฟ้าใส','น้องบัว','ปอ','ต
 const WS=['ขอให้ครอบครัวสุขภาพแข็งแรง','ขอให้สอบผ่านทุกวิชา','ขอบคุณแม่น้ำที่หล่อเลี้ยงเรา','ขอให้ได้เจอคนที่รัก','ขอให้งานราบรื่น เงินทองไหลมา','ขอให้ทุกเรื่องเป็นไปด้วยดี','ขอให้โลกสงบสุข','ขอให้ความทุกข์ลอยไปกับสายน้ำ'];
 const SIDE=matchMedia('(min-width:800px),(max-height:520px) and (orientation:landscape)');let U=1,W,H,dpr,hz,pt,T=0,stars=[],ks=[],rip=[],spk=[],txt=[],idx=new Date().getDay(),sel=null;
 function resize(){dpr=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;
- pv.width=96*dpr;pv.height=64*dpr;
+ pv.width=96*dpr;pv.height=64*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
  stars=Array.from({length:70},()=>({x:Math.random()*W,y:Math.random()*H*.35,r:Math.random()*1.4+.3,p:Math.random()*6}));}
 function ty(r){return hz+(pt-hz)*(.25+.5*r)}
 function add(st,name,wish,mine){const r=Math.random();
